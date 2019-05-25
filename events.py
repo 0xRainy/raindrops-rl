@@ -36,7 +36,8 @@ class Event_Handler():
 
                 elif event.scancode == 17:  # DOWN_RIGHT
                     self.actor.move(1, 1)
+            self.eventlist.pop(self.eventlist.index(event))
 
         # dirty hack, for some reason KEYDOWN events are added to the
         # eventlist multiple times on any event
-        self.eventlist.clear()
+        # self.eventlist.clear()
