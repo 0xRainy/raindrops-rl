@@ -1,27 +1,28 @@
-import player
-
-eventlist = []
+# eventlist = []
 
 
-class Event_Handler(object):
+class Event_Handler():
+    def __init__(self, actor, eventlist=[]):
+        self.actor = actor
+        self.eventlist = eventlist
 
-    @classmethod
-    def addevent(cls, event):
-        eventlist.append(event)
+    def addevent(self, event):
+        self.eventlist.append(event)
 
-    def handle_event():
-        move = player.Player.move
-        for event in eventlist:
-            print(event.scancode)
+    def handle_event(self):
+        for event in self.eventlist:
+            print(event.scancode, event.type)
             if event.type == 'KEYDOWN':
                 if event.scancode == 82:
-                    move(0, -1)
-                    print('UP')
+                    self.actor.move(0, -1)
                 elif event.scancode == 81:
-                    move(0, 1)
+                    self.actor.move(0, 1)
 
                 elif event.scancode == 79:
-                    move(1, 0)
+                    self.actor.move(1, 0)
 
                 elif event.scancode == 80:
-                    move(-1, 0)
+                    self.actor.move(-1, 0)
+        # dirty hack, for some reason KEYDOWN events are added to the
+        # eventlist multiple times on any event
+        self.eventlist.clear()

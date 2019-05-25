@@ -1,7 +1,7 @@
 import tcod
 
 
-class Player(object):
+class Player():
     def __init__(
         self,
         con,
@@ -17,13 +17,9 @@ class Player(object):
         self.ch = ch
         self.bg_blend = bg_blend
 
-
-
-    def move(x, y):
-        x = x + x
-        y = y + y
-        print(x)
-        print(y)
+    def move(self, x, y):
+        self.x = self.x + x
+        self.y = self.y + y
 
     def draw(self):
-        tcod.console_put_char(self.con, self.x, self.y, self.ch, self.bg_blend)
+        self.con.put_char(self.x, self.y, self.ch, self.bg_blend)
