@@ -10,8 +10,9 @@ class Event_Handler(object):
         eventlist.append(event)
 
     def handle_event():
-        move = player.Player.move()
+        move = player.Player.move
         for event in eventlist:
+            print(event.scancode)
             if event.type == 'KEYDOWN':
                 if event.scancode == 82:
                     move(0, -1)

@@ -17,9 +17,13 @@ class Player(object):
         self.ch = ch
         self.bg_blend = bg_blend
 
+
+
     def move(x, y):
-        Player.x += x
-        Player.y += y
+        x = x + x
+        y = y + y
+        print(x)
+        print(y)
 
     def draw(self):
         tcod.console_put_char(self.con, self.x, self.y, self.ch, self.bg_blend)

@@ -15,12 +15,12 @@ console = tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
                                  'raindrops-roguelike',
                                  renderer=tcod.RENDERER_OPENGL2, order='F',
                                  vsync=True,)
-
+p = player.Player(0)
 
 running = True
 while running:
     console.clear()
-    player.Player.draw(player.Player(0))
+    player.Player.draw(p)
     tcod.console_flush()
     events.Event_Handler.handle_event()
     for event in tcod.event.wait():
