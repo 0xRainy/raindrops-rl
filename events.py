@@ -13,16 +13,30 @@ class Event_Handler():
         for event in self.eventlist:
             print(event.scancode, event.type)
             if event.type == 'KEYDOWN':
-                if event.scancode == 82:
+                if event.scancode == 82 or event.scancode == 14:  # UP
                     self.actor.move(0, -1)
-                elif event.scancode == 81:
+
+                elif event.scancode == 81 or event.scancode == 13:  # DOWN
                     self.actor.move(0, 1)
 
-                elif event.scancode == 79:
+                elif event.scancode == 80 or event.scancode == 11:  # LEFT
+                    self.actor.move(-1, 0)
+
+                elif event.scancode == 79 or event.scancode == 15:  # RIGHT
                     self.actor.move(1, 0)
 
-                elif event.scancode == 80:
-                    self.actor.move(-1, 0)
+                elif event.scancode == 28:  # UP_LEFT
+                    self.actor.move(-1, -1)
+
+                elif event.scancode == 24:  # UP_RIGHT
+                    self.actor.move(1, -1)
+
+                elif event.scancode == 5:  # DOWN_LEFT
+                    self.actor.move(-1, 1)
+
+                elif event.scancode == 17:  # DOWN_RIGHT
+                    self.actor.move(1, 1)
+
         # dirty hack, for some reason KEYDOWN events are added to the
         # eventlist multiple times on any event
         self.eventlist.clear()
