@@ -12,6 +12,7 @@ class Event_Handler():
     def handle_event(self):
         for event in self.eventlist:
             if event.type == 'KEYDOWN':
+                print(event.scancode)
                 if event.scancode == 82 or event.scancode == 14:  # UP
                     self.actor.move(0, -1)
 
@@ -35,6 +36,11 @@ class Event_Handler():
 
                 elif event.scancode == 17:  # DOWN_RIGHT
                     self.actor.move(1, 1)
+
+                elif event.scancode == 44:
+                    playerevents.append('SPACEPRESS')
+                    print('added space')
+
             self.eventlist.pop(self.eventlist.index(event))
             playerevents.append('PLAYERMOVED')
 

@@ -2,7 +2,7 @@ import tcod
 import entity as ent
 
 
-def render(con, entities, levelmap, screen_width, screen_height):
+def render(con, entities, items, levelmap, screen_width, screen_height):
     for y in range(levelmap.width):
         for x in range(levelmap.height):
             wall = levelmap.tiles[x][y].solid
@@ -13,6 +13,9 @@ def render(con, entities, levelmap, screen_width, screen_height):
 
     for entity in entities:
         draw_entity(con, entity)
+
+    for item in items:
+        draw_entity(con, item)
 
 
 def clear(con, entities):

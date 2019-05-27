@@ -2,6 +2,7 @@ import tcod
 import tcod.event
 import events
 import renderer
+from items import Item
 from levelmap import levelmap, player_x, player_y
 from random import randint
 from entity import Entity
@@ -38,16 +39,17 @@ observer.join_channel('raindrops_rl')
 
 twitch_names = []
 monster = Entity(0, 2, 2, 'k', (255, 0, 0))
+items = []
 entities = []
 evnt_handler = events.Event_Handler(player)
 hx = 0
 hy = 0
 
-
 running = True
 while running:
     console.clear(fg=(255, 0, 0))
-    renderer.render(console, entities, levelmap, SCREEN_WIDTH, SCREEN_HEIGHT)
+    renderer.render(console, entities, items, levelmap, SCREEN_WIDTH,
+                    SCREEN_HEIGHT)
     renderer.draw_entity(0, player)
     evnt_handler.handle_event()
     for event in observer.get_events():
@@ -55,33 +57,52 @@ while running:
         if event.type == 'TWITCHCHATMESSAGE':
             if event.nickname not in twitch_names:
                 twitch_names.append(event.nickname)
-            while levelmap.is_solid(hx, hy):
-                hx = randint(1, MAP_WIDTH - 1)
-                hy = randint(1, MAP_HEIGHT - 1)
-                if not levelmap.is_solid(hx, hy):
-                    for name in twitch_names:
+                while levelmap.is_solid(hx, hy) and twitch_names:
+                    hx = randint(1, MAP_WIDTH - 1)
+                    hy = randint(1, MAP_HEIGHT - 1)
+                    if not levelmap.is_solid(hx, hy):
+                        name = event.nickname
                         entities.append(Entity(0, hx, hy, name[:1].lower(),
                                         ((randint(100, 255), randint(100, 255),
                                             randint(100, 255)))))
                         twitch_names.pop(twitch_names.index(name))
                         hx = 0
                         hy = 0
+                        break
+
     for i in playerevents:
         if i == 'PLAYERMOVED':
             for entity in entities:
                 if entity.char not in entities:
                     dname = entity.char
                     dcolor = entity.color
-                    dx = entity.x + randint(-1, 1)
-                    dy = entity.y + randint(-1, 1)
-                    if (dy > MAP_HEIGHT - 1 or dx > MAP_WIDTH - 1 or dy < 0
-                            or dx < 0 or levelmap.is_solid(dx, dy)):
-                        pass
+                    if randint(0, 1) == 1:
+                        dx = entity.x + randint(-1, 1)
+                        dy = entity.y + randint(-1, 1)
+                        if (dy > MAP_HEIGHT - 1 or dx > MAP_WIDTH - 1 or dy < 0
+                                or dx < 0 or levelmap.is_solid(dx, dy)):
+                            pass
+                        else:
+                            entities.pop(entities.index(entity))
+                            entities.append(Entity(0, dx, dy, dname, dcolor))
+                            print(entity.char)
+                            print(twitch_names)
                     else:
-                        entities.pop(entities.index(entity))
-                        entities.append(Entity(0, dx, dy, dname, dcolor))
-                        print(entity.char)
+                        pass
             playerevents.pop(playerevents.index(i))
+    for entity in entities:
+        if (player.x, player.y) == (entity.x, entity.y):
+            entities.pop(entities.index(entity))
+            items.append(Item(0, player.x, player.y, '!', (255, 255, 255),
+                         'Potion', 'health'))
+    for item in items:
+        if (player.x, player.y) == (item.x, item.y):
+            if 'SPACEPRESS' in playerevents:
+                tcod.console_put_char(0, player.x, player.y, ' ')
+                items.pop(items.index(item))
+                playerevents.clear()
+            else:
+                pass
     tcod.console_flush()
     for event in tcod.event.wait():
         if event.type == "QUIT":
