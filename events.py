@@ -11,7 +11,6 @@ class Event_Handler():
 
     def handle_event(self):
         for event in self.eventlist:
-            print(event.scancode, event.type)
             if event.type == 'KEYDOWN':
                 if event.scancode == 82 or event.scancode == 14:  # UP
                     self.actor.move(0, -1)
