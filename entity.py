@@ -1,4 +1,5 @@
 import tcod
+from levelmap import levelmap
 
 
 class Entity():
@@ -18,7 +19,9 @@ class Entity():
         self.color = color
 
     def move(self, dx, dy):
-        if self.x + dx > 39 or self.y + dy > 27 or self.x + dx < 0 or self.y + dy < 0:
+        if (self.y + dy > 25 - 1 or self.x + dx > 30 - 1 or self.y + dy < 0
+                or self.x + dx < 0
+                or levelmap.is_solid(self.x + dx, self.y + dy)):
             pass
         else:
             self.x += dx

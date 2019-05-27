@@ -2,6 +2,7 @@ import tcod
 import tcod.event
 import events
 import renderer
+from levelmap import levelmap
 from random import randint
 from entity import Entity
 from events import playerevents
@@ -12,14 +13,18 @@ tcod.console_set_custom_font("terminal32x32_gs_ro.png",
 
 SCREEN_WIDTH = 40
 SCREEN_HEIGHT = 28
+MAP_WIDTH = 30
+MAP_HEIGHT = 25
 
-player_x = 1
-player_y = 1
+player_x = 2
+player_y = 2
 
 console = tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
                                  'raindrops-roguelike',
                                  renderer=tcod.RENDERER_OPENGL2, order='F',
                                  vsync=True,)
+
+levelmap.gen_map()
 player = Entity(0, player_x, player_y, '@', (255, 255, 255))
 
 twitch_names = ['Sticc', 'Maki', 'Emi', 'Bones']
@@ -28,17 +33,16 @@ entities = [monster]
 evnt_handler = events.Event_Handler(player)
 
 for name in twitch_names:
-    entities.append(Entity(0, randint(1, SCREEN_WIDTH - 1),
-                    randint(1, SCREEN_HEIGHT - 1), name[:1].lower(),
+    entities.append(Entity(0, randint(1, MAP_WIDTH - 1),
+                    randint(1, MAP_HEIGHT - 1), name[:1].lower(),
                     ((randint(100, 255), randint(100, 255), randint(100, 255)))
     ))
 
 running = True
 while running:
     console.clear(fg=(255, 0, 0))
+    renderer.render(console, entities, levelmap, SCREEN_WIDTH, SCREEN_HEIGHT)
     renderer.draw_entity(0, player)
-    renderer.render(console, entities, SCREEN_WIDTH, SCREEN_HEIGHT)
-    tcod.console_flush()
     evnt_handler.handle_event()
     for i in playerevents:
         if i == 'PLAYERMOVED':
@@ -47,12 +51,14 @@ while running:
                 dcolor = entity.color
                 dx = entity.x + randint(-1, 1)
                 dy = entity.y + randint(-1, 1)
-                if dy > 27 or dx > 39 or dy < 0 or dx < 0:
+                if (dy > MAP_HEIGHT - 1 or dx > MAP_WIDTH - 1 or dy < 0
+                        or dx < 0 or levelmap.is_solid(dx, dy)):
                     pass
                 else:
                     entities.pop(entities.index(entity))
                     entities.append(Entity(0, dx, dy, dname, dcolor))
         playerevents.pop(playerevents.index(i))
+    tcod.console_flush()
     for event in tcod.event.wait():
         if event.type == "QUIT":
             running = False
