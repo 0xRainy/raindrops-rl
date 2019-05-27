@@ -18,8 +18,11 @@ class Entity():
         self.color = color
 
     def move(self, dx, dy):
-        self.x += dx
-        self.y += dy
+        if self.x + dx > 39 or self.y + dy > 27 or self.x + dx < 0 or self.y + dy < 0:
+            pass
+        else:
+            self.x += dx
+            self.y += dy
 
     # def draw(self):
     #    tcod.console_put_char(self.con, self.x, self.y, self.char,
