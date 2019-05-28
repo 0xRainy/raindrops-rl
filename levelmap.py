@@ -19,7 +19,8 @@ class Level_Map:
                  range(self.height)]
         return tiles
 
-    def gen_map(self, max_rooms, room_min_size, room_max_size, MAP_WIDTH, MAP_HEIGHT, player):
+    def gen_map(self, max_rooms, room_min_size, room_max_size, MAP_WIDTH,
+                MAP_HEIGHT, player):
         # room1 = Rect(0, 0, 6, 6)
         # room2 = Rect(8, 8, 6, 6)
 
@@ -68,7 +69,6 @@ class Level_Map:
     def make_tunnelv(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
             self.tiles[x][y].solid = False
-
 
     def is_solid(self, x, y):
         if self.tiles[x][y].solid:
