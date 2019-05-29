@@ -10,3 +10,9 @@ Raindrops Roguelike is a small game developed with tcod for the MoonCord Game Ja
 MIT
 
 See the [license](./LICENSE) document for the full text.
+
+## TwitchObserver
+
+https://github.com/JoshuaSkelly/twitch-observer
+
+License: https://github.com/joshuaskelly/twitch-observer/blob/master/LICENSE
