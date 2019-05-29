@@ -21,7 +21,7 @@ MAP_HEIGHT = 25
 room_max_size = 7
 room_min_size = 4
 max_rooms = 30
-max_monsters = 7
+max_monsters = 0
 console = tcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT,
                                  'raindrops-roguelike',
                                  renderer=tcod.RENDERER_OPENGL2, order='F',
@@ -34,7 +34,7 @@ levelmap.gen_map(max_rooms, room_min_size, room_max_size, MAP_WIDTH,
 
 observer = Observer('Raindrops_RL', 'oauth:49yke9x8i41z2qlfeoufh4y45o1emy')
 observer.start()
-observer.join_channel('raindrops_rl')
+observer.join_channel('moonmoon_ow')
 
 
 twitch_names = []
@@ -56,19 +56,21 @@ while running:
         print(len(twitch_names), twitch_names)
         if event.type == 'TWITCHCHATMESSAGE':
             if event.nickname not in twitch_names:
-                twitch_names.append(event.nickname)
-                while levelmap.is_solid(hx, hy) and twitch_names:
-                    hx = randint(1, MAP_WIDTH - 1)
-                    hy = randint(1, MAP_HEIGHT - 1)
-                    if not levelmap.is_solid(hx, hy):
-                        name = event.nickname
-                        entities.append(Entity(0, hx, hy, name[:1].lower(),
-                                        ((randint(100, 255), randint(100, 255),
-                                            randint(100, 255)))))
-                        twitch_names.pop(twitch_names.index(name))
-                        hx = 0
-                        hy = 0
-                        break
+                if max_monsters < 10:
+                    twitch_names.append(event.nickname)
+                    while levelmap.is_solid(hx, hy) and twitch_names:
+                        hx = randint(1, MAP_WIDTH - 1)
+                        hy = randint(1, MAP_HEIGHT - 1)
+                        if not levelmap.is_solid(hx, hy):
+                            name = event.nickname
+                            entities.append(Entity(0, hx, hy, name[:1].lower(),
+                                            ((randint(100, 255), randint(100, 255),
+                                                randint(100, 255)))))
+                            twitch_names.pop(twitch_names.index(name))
+                            max_monsters = max_monsters + 1
+                            hx = 0
+                            hy = 0
+                            break
 
     for i in playerevents:
         if i == 'PLAYERMOVED':
@@ -93,6 +95,7 @@ while running:
     for entity in entities:
         if (player.x, player.y) == (entity.x, entity.y):
             entities.pop(entities.index(entity))
+            max_monsters = max_monsters - 1
             items.append(Item(0, player.x, player.y, '!', (255, 255, 255),
                          'Potion', 'health'))
     for item in items:
