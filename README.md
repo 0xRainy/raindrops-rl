@@ -14,6 +14,6 @@ See the [license](./LICENSE) document for the full text.
 
 ## TwitchObserver
 
-https://github.com/JoshuaSkelly/twitch-observer
+[Github](https://github.com/JoshuaSkelly/twitch-observer)
 
-License: https://github.com/joshuaskelly/twitch-observer/blob/master/LICENSE
+[license](https://github.com/joshuaskelly/twitch-observer/blob/master/LICENSE) 
